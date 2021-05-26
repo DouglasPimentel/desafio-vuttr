@@ -2,8 +2,9 @@ import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import logger from 'morgan';
+import { notFoundHandler, errorHandler } from './error';
 
-import { rootRouter } from './routes';
+import { rootRouter, toolRouter } from './routes';
 
 const app = express();
 
@@ -14,5 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', rootRouter);
+app.use('/api/tools', toolRouter);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 export default app;
