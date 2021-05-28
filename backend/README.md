@@ -1,4 +1,4 @@
-# REST API do desafio backend da plataforma BossaBox
+# API do desafio backend da plataforma BossaBox
 
 # Autor
 
