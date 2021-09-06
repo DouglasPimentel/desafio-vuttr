@@ -6,7 +6,7 @@ import { notFoundHandler, errorHandler } from './error';
 
 import { rootRouter, userRouter, toolRouter } from './routes';
 
-const app = express();
+const app: express.Application = express();
 
 app.use(helmet());
 app.use(cors());
