@@ -1,8 +1,8 @@
+import express from 'express';
 import User from './user.model';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
-const SECRET = process.env.SECRET;
+import { config } from '../config';
 
 export const login = async (req, res) => {
   try {
@@ -19,7 +19,9 @@ export const login = async (req, res) => {
     const pass = bcrypt.compareSync(password, user.password);
 
     if (pass) {
-      const token = jwt.sign({ data: user }, SECRET, { expiresIn: 60 * 60 });
+      const token = jwt.sign({ data: user }, config.SECRET, {
+        expiresIn: 60 * 60,
+      });
 
       return res
         .status(200)

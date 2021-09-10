@@ -21,10 +21,23 @@ const ToolSchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true,
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt',
+    },
+    collection: 'Tool',
   },
 );
 
-const Tool = mongoose.model('Tool', ToolSchema);
+export interface ITool extends mongoose.Document {
+  title: string;
+  link: string;
+  description: string;
+  tags: Array<string>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const Tool: mongoose.Model<ITool> = mongoose.model('Tool', ToolSchema);
 
 export default Tool;
