@@ -1,7 +1,18 @@
-import mongoose from 'mongoose';
+import mongoose, { Unpacked } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-const UserSchema = new mongoose.Schema(
+export interface IUser extends mongoose.Document {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  comparePassword: (password: string) => boolean;
+  encryptPassword: (password: string | undefined) => string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const UserSchema = new mongoose.Schema<IUser>(
   {
     firstName: {
       type: String,
@@ -18,8 +29,6 @@ const UserSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      max: 16,
-      min: 8,
       hidden: true,
       required: [true, 'Required field'],
     },
@@ -33,19 +42,9 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-export interface IUser extends mongoose.Document {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  createdAt: Date;
-  updatedAt: Date;
-  encryptPassword: (password: string | undefined) => string;
-}
-
 UserSchema.pre<IUser>(
   'save',
-  function encryptPasswordHook(next: mongoose.HookNextFunction) {
+  function encryptPasswordHook(next: mongoose.HookNextFunction): void {
     if (this.isModified('password')) {
       this.password = this.encryptPassword(this.password);
     }
@@ -55,7 +54,10 @@ UserSchema.pre<IUser>(
 );
 
 UserSchema.methods = {
-  encryptPassword(password: string) {
+  comparePassword(pass: string): boolean {
+    return bcrypt.compareSync(pass, this.password);
+  },
+  encryptPassword(password: string): string {
     return bcrypt.hashSync(password, 10);
   },
 };
