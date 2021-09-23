@@ -54,8 +54,8 @@ UserSchema.pre<IUser>(
 );
 
 UserSchema.methods = {
-  comparePassword(pass: string): boolean {
-    return bcrypt.compareSync(pass, this.password);
+  comparePassword(password: string): boolean {
+    return bcrypt.compareSync(password, this.password);
   },
   encryptPassword(password: string): string {
     return bcrypt.hashSync(password, 10);
