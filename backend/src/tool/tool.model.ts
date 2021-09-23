@@ -1,6 +1,15 @@
 import mongoose from 'mongoose';
 
-const ToolSchema = new mongoose.Schema(
+export interface ITool extends mongoose.Document {
+  title: string;
+  link: string;
+  description: string;
+  tags: Array<string>;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+const ToolSchema = new mongoose.Schema<ITool>(
   {
     title: {
       type: String,
@@ -28,15 +37,6 @@ const ToolSchema = new mongoose.Schema(
     collection: 'Tool',
   },
 );
-
-export interface ITool extends mongoose.Document {
-  title: string;
-  link: string;
-  description: string;
-  tags: Array<string>;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 const Tool: mongoose.Model<ITool> = mongoose.model('Tool', ToolSchema);
 
